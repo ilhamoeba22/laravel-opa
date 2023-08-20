@@ -1,12 +1,7 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Middleware\Authenticate;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -19,48 +14,18 @@ use App\Http\Middleware\Authenticate;
 |
 */
 
-Route::get('/',  fn()=> redirect(
-    '/home'
-)); 
-
-Route::get('home', function () {
-   
-return view('Welcome');
-
+Route::get('/', function () {
+    return view('welcome');
 });
 
-// Route::get('About', function(Request $request){
-//    dd($request);
-// });
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('login', function(){
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-    return view('login');
- })->middleware('guest');
- Route::post('login', function(Request $request){
-
-
-if (Auth::attempt(['email'=>$request->input ('femail'),'password'=>$request->input ('fpassword')])) {
-    $request->session()->regenerate();
-
-    return redirect('/');
-}
-
-return back();
- });
-
-
- Route::get('register', function(){
-
-    return view('register');
- })->middleware('guest');
- Route::post('register', function(Request $request){
-    $name = $request->input('fname');
-    $email = $request->input('femail');
-    $password = $request->input('fpassword');
-
-    
-    DB::table('users')->insert(['name'=>$name,'email'=>$email,'password'=>bcrypt($password)]);
-
-    return redirect('register');
- });
+require __DIR__ . '/auth.php';
