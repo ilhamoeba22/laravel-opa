@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('aspect');
             $table->string('label');
             $table->string('description');
-            $table->text('left');
+            $table->text('left'); 
             $table->text('right');
             $table->integer('modified_id')->unsigned();
             $table->timestamp('modified_date');
