@@ -26,8 +26,10 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
+
+        return response()->json(['status' => 200, 'message' => 'Ya kamu gagal login'], 200);
+
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,7 +17,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $response = Http::get('https://fakestoreapi.com/products/1');
+
+    dd($response);
+});
+
+
+
+Route::view('test-api', 'test-api');
+Route::get('redis', function () {
 });
 
 Route::get('/dashboard', function () {
